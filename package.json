@@ -1,0 +1,70 @@
+{
+  "name": "dns-switcher",
+  "productName": "DNS Switcher",
+  "version": "1.0.0",
+  "description": "Minimal monochrome DNS switcher for Windows — benchmark providers, apply the fastest, lives in the system tray like Cloudflare WARP.",
+  "main": "dist/main/main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YashRana738/DNS-Switcher.git"
+  },
+  "bugs": {
+    "url": "https://github.com/YashRana738/DNS-Switcher/issues"
+  },
+  "homepage": "https://github.com/YashRana738/DNS-Switcher#readme",
+  "keywords": ["dns", "windows", "electron", "tray", "benchmark", "typescript"],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "clean": "node scripts/clean.js",
+    "copy:assets": "node scripts/copy-assets.js",
+    "build:ts": "tsc -p tsconfig.json && npm run copy:assets",
+    "build": "npm run build:ts",
+    "start": "npm run build:ts && electron .",
+    "dev": "npm run build:ts && electron . --dev",
+    "dist": "npm run build:ts && electron-builder --win portable nsis",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "author": "DNS Switcher",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8",
+    "typescript": "^5.6.2"
+  },
+  "build": {
+    "appId": "com.dnsswitcher.app",
+    "productName": "DNS Switcher",
+    "asar": false,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "assets/icon.png",
+      "requestedExecutionLevel": "asInvoker",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "DNS Switcher",
+      "include": "scripts/installer.nsh"
+    },
+    "portable": {
+      "artifactName": "DNS-Switcher-${version}-portable.exe"
+    }
+  }
+}

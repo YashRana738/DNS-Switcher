@@ -1,0 +1,30 @@
+/* Overlay toast — roomy minimal card, fades in and out, follows app theme. */
+html, body { height: 100%; overflow: hidden; }
+::-webkit-scrollbar { display: none; }
+* { scrollbar-width: none; }
+html[data-theme="dark"] { color-scheme: dark; }
+body {
+  margin: 0; overflow: hidden; background: transparent;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+}
+.card {
+  display: flex; gap: 9px; align-items: center;
+  background: #ffffff; color: #171717;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 10px; padding: 9px 12px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.24);
+  cursor: pointer; position: relative;
+  animation: fadein 0.22s ease-out;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+html[data-theme="dark"] .card {
+  background: #171717; color: #f2f2f0;
+  border-color: rgba(255, 255, 255, 0.16);
+}
+.card.leaving { opacity: 0; transform: translateY(6px); }
+@keyframes fadein { from { opacity: 0; transform: translateY(8px); } }
+.card.error .title { color: #d71921; }
+.mark { flex: none; align-self: center; display: grid; place-items: center; }
+.texts { flex: 1; min-width: 0; align-self: center; }
+.title { font-size: 12.5px; font-weight: 650; letter-spacing: -0.005em; line-height: 1.3; }
+.body { font-size: 12px; opacity: 0.68; margin-top: 2px; line-height: 1.45; }

@@ -1,0 +1,11 @@
+node_modules/
+dist/
+release/
+*.log
+settings.json
+Thumbs.db
+.DS_Store
+.vscode/
+*.orig
+*.rej
+opencode.json

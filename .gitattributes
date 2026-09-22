@@ -1,0 +1,7 @@
+# Text handling: normalize line endings, keep binaries intact.
+* text=auto
+*.png binary
+*.ico binary
+*.icns binary
+*.exe binary
+*.7z binary

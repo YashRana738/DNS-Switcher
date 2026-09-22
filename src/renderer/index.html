@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:;" />
+  <title>DNS Switcher</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="app">
+    <header class="titlebar">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">
+          <svg viewBox="0 0 64 64" width="24" height="24"><rect x="4" y="4" width="56" height="56" rx="15" fill="#101012"/><ellipse cx="32" cy="33" rx="19" ry="19" fill="none" stroke="#F5F5F4" stroke-width="3.4"/><path d="M35 19 L26.5 33 h4 L29 46 L38.5 30.5 h-4 z" fill="#F5F5F4"/><circle cx="44.7" cy="19.9" r="4.8" fill="#D71921"/></svg>
+        </div>
+        <div>
+          <div class="brand-title">DNS Switcher</div>
+          <div class="brand-sub" id="subtitle">DNS manager</div>
+        </div>
+      </div>
+      <div class="titlebar-actions">
+        <label class="adapter-label">Adapter</label>
+        <div class="combo-wrap">
+          <button id="adapterBtn" class="combobox combo-btn" title="Network adapter">
+            <span id="adapterLabel">…</span><span class="chev">▾</span>
+          </button>
+          <div id="adapterMenu" class="combo-menu hidden" role="listbox"></div>
+        </div>
+        <button id="themeBtn" class="icon-btn" title="Toggle light / dark">◐</button>
+      </div>
+    </header>
+
+    <div id="adminBar" class="infobar admin hidden">
+      <span class="lock" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4.5" y="10" width="15" height="10" rx="2.5"/><path d="M8 10V7.5a4 4 0 0 1 8 0V10"/></svg>
+      </span>
+      <div class="infobar-text">
+        <strong>Admin rights needed</strong>
+        <span>Windows requires elevation to change DNS.</span>
+      </div>
+      <button id="adminBtn" class="button primary small">Restart as admin</button>
+    </div>
+
+    <nav class="viewnav" aria-label="Views">
+      <button id="navMain" class="seg active">Dashboard</button>
+      <button id="navSettings" class="seg">Settings</button>
+    </nav>
+
+    <div id="viewMain">
+    <main class="layout">
+      <section class="card status-card">
+        <div class="card-title">Connection</div>
+        <div class="status-row">
+          <div id="statusDot" class="status-dot"></div>
+          <div>
+            <div id="statusName" class="status-name">Detecting…</div>
+            <div id="statusDetail" class="status-detail">—</div>
+          </div>
+          <label class="switch" title="Apply / revert DNS">
+            <input type="checkbox" id="enableToggle" checked />
+            <span class="track"><span class="thumb"></span></span>
+          </label>
+        </div>
+        <div class="dns-chips">
+          <div class="chip"><span class="chip-label">Primary</span><span id="curPrimary" class="chip-value">—</span></div>
+          <div class="chip"><span class="chip-label">Secondary</span><span id="curSecondary" class="chip-value">—</span></div>
+        </div>
+        <div class="btn-row">
+          <button id="autoBtn" class="button">Automatic (DHCP)</button>
+          <button id="flushBtn" class="button">Flush cache</button>
+          <button id="refreshBtn" class="button">⟳ Refresh</button>
+        </div>
+        <div class="custom">
+          <div class="card-subtitle">Custom DNS</div>
+          <div class="custom-row">
+            <input id="customPrimary" class="textbox" placeholder="e.g. 1.1.1.1" inputmode="numeric" />
+            <input id="customSecondary" class="textbox" placeholder="e.g. 1.0.0.1" inputmode="numeric" />
+            <button id="customBtn" class="button primary">Use</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card bench-card">
+        <div class="bench-head">
+          <div class="card-title">Speed test</div>
+          <button id="benchBtn" class="button primary small">Benchmark</button>
+        </div>
+        <p class="muted">Ping + real DNS query per provider, ranked fastest-first.</p>
+        <div id="benchEmpty" class="bench-empty">
+          <div class="bench-empty-glyph">···</div>
+          <div>No benchmark results yet.<br />Run one to rank all providers.</div>
+        </div>
+        <div id="topList" class="top-list hidden"></div>
+        <div id="benchProgress" class="progress hidden">
+          <div class="progress-track"><div id="benchBar" class="progress-bar"></div></div>
+          <div id="benchLabel" class="muted small">Starting…</div>
+        </div>
+      </section>
+    </main>
+
+    <section class="card providers-card">
+      <div class="providers-head">
+        <div class="card-title">Providers <span id="provCount" class="muted small"></span></div>
+        <input id="search" class="textbox search" placeholder="Search providers…" />
+      </div>
+      <div id="providerList" class="provider-list"></div>
+    </section>
+
+    </div><!-- /viewMain -->
+
+    <div id="viewSettings" class="hidden">
+      <section class="card">
+        <div class="card-title">Tray &amp; startup</div>
+        <p class="muted">Behaves like Cloudflare WARP — quiet, tray-first.</p>
+        <label class="setting-row">
+          <span class="setting-texts"><span class="setting-name">Collapse to tray</span><span class="setting-desc">Minimize and close hide the window instead of quitting</span></span>
+          <span class="switch"><input type="checkbox" id="optTray" checked /><span class="track"><span class="thumb"></span></span></span>
+        </label>
+        <label class="setting-row">
+          <span class="setting-texts"><span class="setting-name">Start minimized</span><span class="setting-desc">Boot straight into the tray, no window</span></span>
+          <span class="switch"><input type="checkbox" id="optMinimized" /><span class="track"><span class="thumb"></span></span></span>
+        </label>
+        <label class="setting-row">
+          <span class="setting-texts"><span class="setting-name">Launch at startup</span><span class="setting-desc">Silent and elevated when possible, no UAC at logon</span></span>
+          <span class="switch"><input type="checkbox" id="optStartup" /><span class="track"><span class="thumb"></span></span></span>
+        </label>
+        <label class="setting-row last">
+          <span class="setting-texts"><span class="setting-name">Always run as admin</span><span class="setting-desc">UAC prompt on every manual launch</span></span>
+          <span class="switch"><input type="checkbox" id="optAdmin" checked /><span class="track"><span class="thumb"></span></span></span>
+        </label>
+      </section>
+
+      <section class="card">
+        <div class="card-title">Appearance</div>
+        <div class="seg-group" role="group" aria-label="Theme">
+          <button id="themeSystem" class="seg">System</button>
+          <button id="themeLight" class="seg">Light</button>
+          <button id="themeDark" class="seg">Dark</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-title">About</div>
+        <p class="muted">DNS Switcher 1.0.0 · Electron + TypeScript · per-adapter DNS over Windows netsh / PowerShell.</p>
+        <div class="btn-row">
+          <button id="quitBtn" class="button">Quit DNS Switcher</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div id="toasts" class="toasts"></div>
+  <div id="overlay" class="overlay hidden"><div class="spinner"></div><div id="overlayText" class="muted">Working…</div></div>
+
+  <script src="./renderer.js"></script>
+</body>
+</html>
