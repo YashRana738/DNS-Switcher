@@ -20,11 +20,11 @@ to the tray.
 Get the latest release for your architecture from the
 [**Releases**](https://github.com/YashRana738/DNS-Switcher/releases) page.
 
-| Architecture | Installer | Portable (no install) |
-| --- | --- | --- |
-| x64 (most PCs) | `DNS-Switcher-Setup-1.0.0-x64.exe` | `DNS-Switcher-1.0.0-x64-portable.exe` |
-| ARM64 (Snapdragon / Surface) | `DNS-Switcher-Setup-1.0.0-arm64.exe` | `DNS-Switcher-1.0.0-arm64-portable.exe` |
-| 32-bit (x86) | `DNS-Switcher-Setup-1.0.0-ia32.exe` | `DNS-Switcher-1.0.0-ia32-portable.exe` |
+| Architecture | Portable (no install, just run) |
+| --- | --- |
+| x64 (most PCs) | `DNS-Switcher-1.0.0-x64-portable.exe` |
+| ARM64 (Snapdragon / Surface) | `DNS-Switcher-1.0.0-arm64-portable.exe` |
+| 32-bit (x86) | `DNS-Switcher-1.0.0-ia32-portable.exe` |
 
 > Windows SmartScreen will warn about the unsigned publisher on first run —
 > expected for community builds. Click *More info → Run anyway*, then approve
@@ -89,10 +89,10 @@ scripts/       asset copy, clean, icon fetcher, NSIS uninstall hook
 GitHub Actions type-checks and packages the portable exes (x64, ARM64, 32-bit)
 on every push and pull request.
 
-## Uninstall
+## Removing the app
 
-Use *Add or remove programs* — the uninstaller also removes the logon task
-and Run entry. To remove the task manually:
+Portable build — just delete the exe. If you enabled *Launch at Windows
+startup*, also remove the logon task and settings:
 
 ```powershell
 schtasks /delete /tn "DNS Switcher" /f

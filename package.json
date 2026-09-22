@@ -23,7 +23,7 @@
     "build": "npm run build:ts",
     "start": "npm run build:ts && electron .",
     "dev": "npm run build:ts && electron . --dev",
-    "dist": "npm run build:ts && electron-builder --win portable nsis",
+    "dist": "npm run build:ts && electron-builder --win portable",
     "postinstall": "electron-builder install-app-deps"
   },
   "author": "DNS Switcher",
@@ -48,21 +48,11 @@
     ],
     "win": {
       "target": [
-        "nsis",
         "portable"
       ],
       "icon": "assets/icon.png",
       "requestedExecutionLevel": "asInvoker",
       "signAndEditExecutable": false
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "DNS Switcher",
-      "artifactName": "DNS-Switcher-Setup-${version}-${arch}.exe",
-      "include": "scripts/installer.nsh"
     },
     "portable": {
       "artifactName": "DNS-Switcher-${version}-${arch}-portable.exe"
