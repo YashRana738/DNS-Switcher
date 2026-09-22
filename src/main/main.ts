@@ -605,10 +605,10 @@ function registerIpc(): void {
     }
   });
 
-  ipcMain.handle("dns:applyBest", async (_e, results: { providerId: string; primary: string; secondary: string }[]) => {
+  ipcMain.handle("dns:applyBest", async (_e, results: { providerId: string; primary: string; secondary: string; scoreMs: number | null }[]) => {
     const alias = settings.selectedAdapter || (await currentAdapterAlias());
-    const best = results[0];
-    if (!best) throw new Error("No results.");
+    const best = results.find((r) => r.scoreMs != null) ?? results[0];
+    if (!best || best.scoreMs == null) throw new Error("No reachable results.");
     await setAdapterDns(alias, [best.primary, best.secondary]);
     settings.lastProviderByAdapter[alias] = best.providerId;
     saveSettings(settings);

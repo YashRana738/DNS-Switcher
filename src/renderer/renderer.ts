@@ -334,18 +334,20 @@ async function applyProvider(providerId: string, primary?: string, secondary?: s
 
 async function pingRow(providerId: string, btn: HTMLElement): Promise<void> {
   const p = state?.providers.find((x) => x.id === providerId);
-  if (!p) return;
-  const badge = btn.closest(".prov")?.querySelector(".ping");
+  if (!p || busy) return;
   btn.textContent = "…";
   (btn as HTMLButtonElement).disabled = true;
   try {
     const res = await window.dnsApi.benchmarkOne(providerId);
     resultsById.set(providerId, res);
-    if (badge) {
-      badge.className = `ping ${pingClass(res.bestAvgMs)}`;
-      badge.textContent = pingText(res.bestAvgMs);
-      badge.setAttribute("title", `ping ${res.bestAvgMs ?? "—"} ms · dns ${res.dnsQueryMs ?? "—"} ms`);
-    }
+    // Fold single results into the ranking so badges, crowns and the
+    // top-3 list can never disagree with each other.
+    const i = lastResults.findIndex((r) => r.providerId === providerId);
+    if (i >= 0) lastResults[i] = res;
+    else lastResults.push(res);
+    lastResults.sort((a, b) => (a.scoreMs ?? 1e9) - (b.scoreMs ?? 1e9));
+    renderTopList();
+    renderProviders(input("search").value);
   } catch (e) {
     toast(`Ping failed for ${p.name}`, "error");
   } finally {
@@ -396,6 +398,7 @@ function renderTopList(): void {
   ranked.forEach((r, i) => {
     const row = document.createElement("div");
     row.className = "top-row" + (i === 0 ? " first" : "");
+    row.title = `score ${r.scoreMs} ms (ping ${r.bestAvgMs ?? "—"} ms · dns ${r.dnsQueryMs ?? "—"} ms)`;
     const rank = document.createElement("span");
     rank.className = "top-rank";
     rank.textContent = String(i + 1);
@@ -404,7 +407,7 @@ function renderTopList(): void {
     nm.textContent = providerLabel(r.providerId);
     const ms = document.createElement("span");
     ms.className = "top-ms";
-    ms.textContent = `${r.scoreMs} ms`;
+    ms.textContent = `${r.bestAvgMs ?? r.scoreMs} ms`;
     row.appendChild(rank);
     row.appendChild(nm);
     row.appendChild(ms);
