@@ -1,0 +1,27 @@
+name: build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Package portable exes (x64, arm64, ia32)
+        run: npx electron-builder --win portable --x64 --arm64 --ia32 --publish never
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dns-switcher-portable
+          path: release/*portable.exe

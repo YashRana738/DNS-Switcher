@@ -61,10 +61,11 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "DNS Switcher",
+      "artifactName": "DNS-Switcher-Setup-${version}-${arch}.exe",
       "include": "scripts/installer.nsh"
     },
     "portable": {
-      "artifactName": "DNS-Switcher-${version}-portable.exe"
+      "artifactName": "DNS-Switcher-${version}-${arch}-portable.exe"
     }
   }
 }
