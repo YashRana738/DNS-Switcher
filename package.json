@@ -23,7 +23,7 @@
     "build": "npm run build:ts",
     "start": "npm run build:ts && electron .",
     "dev": "npm run build:ts && electron . --dev",
-    "dist": "npm run build:ts && electron-builder --win portable",
+    "dist": "npm run build:ts && electron-builder --win zip",
     "postinstall": "electron-builder install-app-deps"
   },
   "author": "DNS Switcher",
@@ -48,14 +48,11 @@
     ],
     "win": {
       "target": [
-        "portable"
+        "zip"
       ],
       "icon": "assets/icon.png",
       "requestedExecutionLevel": "asInvoker",
       "signAndEditExecutable": false
-    },
-    "portable": {
-      "artifactName": "DNS-Switcher-${version}-${arch}-portable.exe"
     }
   }
 }

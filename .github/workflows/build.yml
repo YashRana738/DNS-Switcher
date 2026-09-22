@@ -18,10 +18,10 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      - name: Package portable exes (x64, arm64, ia32)
-        run: npx electron-builder --win portable --x64 --arm64 --ia32 --publish never
+      - name: Package zips (x64, arm64, ia32)
+        run: npx electron-builder --win zip --x64 --arm64 --ia32 --publish never
 
       - uses: actions/upload-artifact@v4
         with:
-          name: dns-switcher-portable
-          path: release/*portable.exe
+          name: dns-switcher-zips
+          path: release/*.zip

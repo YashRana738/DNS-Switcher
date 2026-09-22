@@ -20,11 +20,14 @@ to the tray.
 Get the latest release for your architecture from the
 [**Releases**](https://github.com/YashRana738/DNS-Switcher/releases) page.
 
-| Architecture | Portable (no install, just run) |
+| Architecture | Portable zip (extract & run, no install) |
 | --- | --- |
-| x64 (most PCs) | `DNS-Switcher-1.0.0-x64-portable.exe` |
-| ARM64 (Snapdragon / Surface) | `DNS-Switcher-1.0.0-arm64-portable.exe` |
-| 32-bit (x86) | `DNS-Switcher-1.0.0-ia32-portable.exe` |
+| x64 (most PCs) | `DNS-Switcher-1.0.0-x64.zip` |
+| ARM64 (Snapdragon / Surface) | `DNS-Switcher-1.0.0-arm64.zip` |
+| 32-bit (x86) | `DNS-Switcher-1.0.0-ia32.zip` |
+
+Extract anywhere permanent (e.g. Documents) and run `DNS Switcher.exe`
+inside — keep the folder, the app relaunches from it when elevating.
 
 > Windows SmartScreen will warn about the unsigned publisher on first run —
 > expected for community builds. Click *More info → Run anyway*, then approve
@@ -59,7 +62,7 @@ npm start        # build + run
 | --- | --- |
 | `npm run build` | Type-check + compile to `dist/` |
 | `npm start` | Build and launch the app |
-| `npm run dist` | NSIS installer + portable exe (all archs with flags) |
+| `npm run dist` | ZIP packages for all Windows archs |
 | `npm run clean` | Remove `dist/` and `release/` |
 
 ### Project layout
@@ -91,7 +94,7 @@ on every push and pull request.
 
 ## Removing the app
 
-Portable build — just delete the exe. If you enabled *Launch at Windows
+Portable build — just delete the extracted folder. If you enabled *Launch at Windows
 startup*, also remove the logon task and settings:
 
 ```powershell
