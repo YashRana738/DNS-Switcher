@@ -1,38 +1,52 @@
 # DNS Switcher
 
-Minimal monochrome DNS switcher for **Windows** — benchmark providers, apply the
-fastest with one click, and live in the system tray like Cloudflare WARP.
+[![Release](https://img.shields.io/github/v/release/YashRana738/DNS-Switcher?style=flat-square)](https://github.com/YashRana738/DNS-Switcher/releases)
+[![Platform](https://img.shields.io/badge/platform-Windows-0078D4?style=flat-square)](https://github.com/YashRana738/DNS-Switcher/releases)
+[![License](https://img.shields.io/github/license/YashRana738/DNS-Switcher?style=flat-square)](LICENSE)
+[![Build](https://img.shields.io/github/actions/workflow/status/YashRana738/DNS-Switcher/build.yml?style=flat-square)](https://github.com/YashRana738/DNS-Switcher/actions)
 
-Built with **Electron + TypeScript**. No system notifications: the app shows
-quiet in-app toasts, or a small topmost overlay card when collapsed to tray.
+A minimal, monochrome DNS switcher for **Windows**. Benchmark every major
+provider, apply the fastest with one click, and let the app live quietly in
+the system tray — in the spirit of Cloudflare WARP.
+
+Built with **Electron + TypeScript**. No notification-center spam: the app
+shows quiet in-app toasts, or a small topmost overlay card when collapsed
+to the tray.
+
+---
+
+## Download
+
+Get the latest release for your architecture from the
+[**Releases**](https://github.com/YashRana738/DNS-Switcher/releases) page.
+
+| Architecture | Installer | Portable (no install) |
+| --- | --- | --- |
+| x64 (most PCs) | `DNS-Switcher-Setup-1.0.0-x64.exe` | `DNS-Switcher-1.0.0-x64-portable.exe` |
+| ARM64 (Snapdragon / Surface) | `DNS-Switcher-Setup-1.0.0-arm64.exe` | `DNS-Switcher-1.0.0-arm64-portable.exe` |
+| 32-bit (x86) | `DNS-Switcher-Setup-1.0.0-ia32.exe` | `DNS-Switcher-1.0.0-ia32-portable.exe` |
+
+> Windows SmartScreen will warn about the unsigned publisher on first run —
+> expected for community builds. Click *More info → Run anyway*, then approve
+> the UAC prompt so the app can manage DNS.
 
 ## Features
 
-- Switch per-adapter DNS (Wi-Fi / Ethernet) across 12 providers: Cloudflare,
-  Google, Quad9, OpenDNS, AdGuard (+ Family), CleanBrowsing, Comodo,
-  Lumen, Verisign, Control D, NextDNS — plus Custom and Automatic (DHCP).
-- **Speed test**: ICMP ping (worst sample dropped) + real DNS-query timing,
-  ranked 1-2-3 with one-click **Apply**.
-- Registry-backed DHCP-vs-static detection — router DNS correctly reads as
-  Automatic, never "Custom".
-- **Tray-first**: close/minimize collapses to tray, quick-switch menu,
+- **12 providers + Custom + Automatic (DHCP)** — Cloudflare, Google, Quad9,
+  OpenDNS, AdGuard (+ Family), CleanBrowsing, Comodo, Lumen, Verisign,
+  Control D, NextDNS.
+- **Speed test** — ICMP ping (worst sample dropped) plus real DNS-query
+  timing, ranked 1-2-3 with one-click **Apply**.
+- **Correct auto-detection** — registry-backed DHCP-vs-static check, so
+  router DNS reads as Automatic and never as "Custom".
+- **Tray-first** — close/minimize collapses to tray, quick-switch menu,
   single instance, launch at startup, start minimized.
-- **Always-admin mode**: auto-elevates on launch (one UAC prompt); optional
-  silent elevated autostart via Task Scheduler (no UAC at logon).
-- Minimal monochrome UI (light/dark, follows Windows), overlay popups instead
-  of notification-center spam, zero blur/gradient effects for speed.
+- **Always-admin mode** — auto-elevates on launch with a single UAC prompt;
+  optional silent elevated autostart (no UAC at logon).
+- **Minimal monochrome UI** — light/dark following Windows, overlay popups
+  instead of notifications, zero blur/gradient effects for speed.
 
-## Install (users)
-
-1. Download `DNS Switcher Setup 1.0.0.exe` from
-   [Releases](https://github.com/YashRana738/DNS-Switcher/releases).
-2. Run it (Windows SmartScreen will warn about the unsigned publisher —
-   expected for local builds; click *More info → Run anyway*).
-3. Approve the UAC prompt on first launch so the app can manage DNS.
-
-Portable alternative: `DNS-Switcher-1.0.0-portable.exe` — no install needed.
-
-## Run from source (developers)
+## For developers
 
 Prerequisites: [Node.js](https://nodejs.org/) 20+.
 
@@ -41,57 +55,48 @@ npm install
 npm start        # build + run
 ```
 
-| Script             | What it does                              |
-| ------------------ | ----------------------------------------- |
-| `npm run build`    | Type-check + compile to `dist/`           |
-| `npm start`        | Build and launch the app                  |
-| `npm run dist`     | Build NSIS installer + portable exe       |
-| `npm run clean`    | Remove `dist/` and `release/`             |
-| `node scripts/fetch-icons.py`  | Re-download provider logos |
-| `python scripts/fetch-icons.py`| (requires `pillow`)          |
+| Script | Purpose |
+| --- | --- |
+| `npm run build` | Type-check + compile to `dist/` |
+| `npm start` | Build and launch the app |
+| `npm run dist` | NSIS installer + portable exe (all archs with flags) |
+| `npm run clean` | Remove `dist/` and `release/` |
 
-## Project structure
+### Project layout
 
 ```
 src/
-  main/        Electron main: window, tray, DNS engine, benchmark, elevation
-    main.ts        app lifecycle, tray menu, overlay manager, IPC
-    dnsManager.ts  adapters, DNS read/apply/flush, DHCP-vs-static detect
-    benchmark.ts   ping + DNS-query timing and ranking
-    providers.ts   provider list (IPs, colors, bundled logo files)
-    store.ts       JSON settings in %APPDATA%/DNS Switcher
+  main/        window, tray, DNS engine, benchmark, elevation, IPC
+    main.ts / dnsManager.ts / benchmark.ts / providers.ts / store.ts
   preload/     context-bridge APIs (dnsApi, notifyApi)
-  renderer/    UI: index.html + styles.css + renderer.ts (plain script)
+  renderer/    UI: index.html + styles.css + renderer.ts
                notify.html/css/ts (topmost overlay card)
-assets/        app icon + per-provider logos (bundled, offline)
-scripts/       copy-assets, clean, fetch-icons, NSIS uninstall hook
-release/       build output (git-ignored)
+assets/        app icon + bundled provider logos (works offline)
+scripts/       asset copy, clean, icon fetcher, NSIS uninstall hook
 ```
 
-## How DNS switching works
+### How DNS switching works
 
 - Adapters via `Get-NetAdapter`, current DNS via `Get-DnsClientServerAddress`.
-- Apply via `Set-DnsClientServerAddress` (fallback: `netsh`), then
-  `ipconfig /flushdns` — flush is automatic on every change.
-- DHCP-vs-static is read from the interface's `NameServer` registry value,
-  so DHCP-provided (router) DNS never misreports as custom.
-- Changing DNS requires elevation: the app relaunches itself as admin
-  (synchronous UAC handoff, single-instance-safe). Pass `--no-elevate` to
-  force a plain start.
+- Apply via `Set-DnsClientServerAddress` (fallback: `netsh`), followed by an
+  automatic `ipconfig /flushdns` on every change.
+- DHCP-vs-static comes from the interface's `NameServer` registry value.
+- Elevation uses a synchronous UAC handoff that is single-instance safe.
+  Pass `--no-elevate` to force a plain start.
+
+### CI
+
+GitHub Actions type-checks and packages the portable exes (x64, ARM64, 32-bit)
+on every push and pull request.
 
 ## Uninstall
 
-Use *Add or remove programs* as usual. The uninstaller also removes the
-`DNS Switcher` logon task and Run entry. To remove the task manually:
+Use *Add or remove programs* — the uninstaller also removes the logon task
+and Run entry. To remove the task manually:
 
 ```powershell
 schtasks /delete /tn "DNS Switcher" /f
 ```
-
-## CI
-
-GitHub Actions (`.github/workflows/build.yml`) type-checks and builds the
-portable exe on every push/PR, uploading it as an artifact.
 
 ## License
 
