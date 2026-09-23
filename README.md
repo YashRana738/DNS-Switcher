@@ -22,9 +22,9 @@ Get the latest release for your architecture from the
 
 | Architecture | Portable zip (extract & run, no install) |
 | --- | --- |
-| x64 (most PCs) | `DNS-Switcher-1.0.0-x64.zip` |
-| ARM64 (Snapdragon / Surface) | `DNS-Switcher-1.0.0-arm64.zip` |
-| 32-bit (x86) | `DNS-Switcher-1.0.0-ia32.zip` |
+| x64 (most PCs) | `DNS-Switcher-1.0.1-x64.zip` |
+| ARM64 (Snapdragon / Surface) | `DNS-Switcher-1.0.1-arm64.zip` |
+| 32-bit (x86) | `DNS-Switcher-1.0.1-ia32.zip` |
 
 Extract anywhere permanent (e.g. Documents) and run `DNS Switcher.exe`
 inside — keep the folder, the app relaunches from it when elevating.

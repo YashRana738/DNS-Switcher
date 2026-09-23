@@ -3,6 +3,15 @@
 All notable changes to DNS Switcher are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.0.1] - 2026-09-23
+
+### Fixed
+
+- Speed-test top-3 and provider badges now show the same ping numbers.
+  (They previously mixed the ranking score with raw ping, which looked
+  like stale data.) Single-row pings also fold into the shared ranking,
+  and Apply refuses unreachable results.
+
 ## [1.0.0] - 2026-09-22
 
 Initial release.

@@ -1,7 +1,7 @@
 {
   "name": "dns-switcher",
   "productName": "DNS Switcher",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Minimal monochrome DNS switcher for Windows — benchmark providers, apply the fastest, lives in the system tray like Cloudflare WARP.",
   "main": "dist/main/main.js",
   "repository": {
